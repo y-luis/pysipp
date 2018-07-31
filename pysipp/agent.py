@@ -234,7 +234,7 @@ class ScenarioType(object):
     If called it will invoke the standard run hooks.
     """
     def __init__(self, agents, defaults, clientdefaults=None,
-                 serverdefaults=None, confpy=None):
+                 serverdefaults=None, confpy=None, logs=True):
         # agents iterable in launch-order
         self._agents = agents
         ua_attrs = UserAgent.keys()
@@ -253,6 +253,7 @@ class ScenarioType(object):
 
         # hook module
         self.mod = confpy
+        self.logs = logs
 
     @property
     def agents(self):
@@ -364,7 +365,9 @@ class ScenarioType(object):
         params = merge(ordered)
         log.debug("merged contents:\n{}".format(params))
         ua = UserAgent(defaults=params)
-        ua.enable_logging()
+
+        if self.logs:
+            ua.enable_logging()
 
         # call post defaults hook
         plugin.mng.hook.pysipp_post_ua_defaults(ua=ua)
