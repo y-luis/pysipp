@@ -72,10 +72,10 @@ class UserAgent(command.SippCmd):
         )
 
     def is_client(self):
-        return 'uac' in self.name.lower()
+        return 'uac' in self.name.lower() or 'caller' in self.name.lower()
 
     def is_server(self):
-        return 'uas' in self.name.lower()
+        return 'uas' in self.name.lower() or 'callee' in self.name.lower()
 
     def iter_logfile_items(self, types_attr='_log_types'):
         for name in getattr(self, types_attr):
