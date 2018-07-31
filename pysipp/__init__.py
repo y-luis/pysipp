@@ -60,10 +60,10 @@ def walk(rootpath, delay_conf_scen=False, autolocalsocks=True,
 
             agents = []
             for xml in xmls:
-                if 'uac' in xml.lower():
+                if 'uac' in xml.lower() or 'caller' in xml.lower():
                     ua = agent.client(scen_file=xml)
                     agents.append(ua)
-                elif 'uas' in xml.lower():
+                elif 'uas' in xml.lower() or 'callee' in xml.lower():
                     ua = agent.server(scen_file=xml)
                     agents.insert(0, ua)  # servers are always launched first
                 else:
