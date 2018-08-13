@@ -8,7 +8,7 @@ import tempfile
 from copy import deepcopy
 from distutils import spawn
 from collections import namedtuple, OrderedDict
-from . import command, plugin, utils
+from . import command, plugin, utils, UAC_SUBSTRING
 
 log = utils.get_logger()
 
@@ -72,10 +72,10 @@ class UserAgent(command.SippCmd):
         )
 
     def is_client(self):
-        return 'uac' in self.name.lower() or 'caller' in self.name.lower()
+        return any(x in self.name.lower() for x in UAC_SUBSTRING)
 
     def is_server(self):
-        return 'uas' in self.name.lower() or 'callee' in self.name.lower()
+        return any(x in self.name.lower() for x in UAS_SUBSTRING)
 
     def iter_logfile_items(self, types_attr='_log_types'):
         for name in getattr(self, types_attr):

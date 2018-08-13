@@ -35,6 +35,9 @@ __author__ = 'Tyler Goodlet (tgoodlet@gmail.com)'
 
 __all__ = ['walk', 'client', 'server', 'plugin']
 
+UAS_SUBSTRING = ['uas', 'callee', 'ms', 'referred']
+UAC_SUBSTRING = ['uac', 'caller']
+
 
 def walk(rootpath, delay_conf_scen=False, autolocalsocks=True,
          **scenkwargs):
@@ -60,16 +63,16 @@ def walk(rootpath, delay_conf_scen=False, autolocalsocks=True,
 
             agents = []
             for xml in xmls:
-                if 'uac' in xml.lower() or 'caller' in xml.lower():
+                if any(x in xml.lower() for x in UAC_SUBSTRING):
                     ua = agent.client(scen_file=xml)
                     agents.append(ua)
-                elif 'uas' in xml.lower() or 'callee' in xml.lower():
+                elif any(x in xml.lower() for x in UAS_SUBSTRING):
                     ua = agent.server(scen_file=xml)
                     agents.insert(0, ua)  # servers are always launched first
                 else:
                     raise ValueError(
-                        "xml script must contain one of 'uac' or 'uas':\n{}"
-                        .format(xml)
+                        "xml script must contain one of {} or {}:\n{}"
+                        .format(UAS_SUBSTRING, UAC_SUBSTRING, xml)
                     )
 
             if delay_conf_scen:
