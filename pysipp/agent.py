@@ -8,11 +8,14 @@ import tempfile
 from copy import deepcopy
 from distutils import spawn
 from collections import namedtuple, OrderedDict
-from . import command, plugin, utils, UAC_SUBSTRING
+from . import command, plugin, utils
 
 log = utils.get_logger()
 
 SocketAddr = namedtuple('SocketAddr', 'ip port')
+
+UAS_SUBSTRING = ['uas', 'callee', 'ms', 'referred']
+UAC_SUBSTRING = ['uac', 'caller']
 
 
 def tuple_property(attrs):

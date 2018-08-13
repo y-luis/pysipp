@@ -22,7 +22,7 @@ import sys
 from os.path import dirname
 from . import launch, report, plugin, netplug, agent
 from .load import iter_scen_dirs
-from .agent import client, server
+from .agent import client, server, UAC_SUBSTRING, UAS_SUBSTRING
 
 
 class SIPpFailure(RuntimeError):
@@ -34,9 +34,6 @@ __package__ = 'pysipp'
 __author__ = 'Tyler Goodlet (tgoodlet@gmail.com)'
 
 __all__ = ['walk', 'client', 'server', 'plugin']
-
-UAS_SUBSTRING = ['uas', 'callee', 'ms', 'referred']
-UAC_SUBSTRING = ['uac', 'caller']
 
 
 def walk(rootpath, delay_conf_scen=False, autolocalsocks=True,
