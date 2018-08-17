@@ -76,9 +76,9 @@ class UserAgent(command.SippCmd):
     def is_server(self):
         return 'uas' in self.name.lower()
 
-    def iter_logfile_items(self, types_attr='_log_types', screen_file=True):
+    def iter_logfile_items(self, types_attr='_log_types', enable_screen_file=True):
         for name in getattr(self, types_attr):
-            if name != 'screen' or screen_file:
+            if name != 'screen' or enable_screen_file:
                 attr_name = name + '_file'
                 yield attr_name, getattr(self, attr_name)
 
@@ -118,11 +118,11 @@ class UserAgent(command.SippCmd):
             attr_name = 'trace_' + name
             setattr(self, attr_name, True)
 
-    def enable_logging(self, logdir=None, debug=False, screen_file=True):
+    def enable_logging(self, logdir=None, debug=False, enable_screen_file=True):
         """Enable agent logging by appending appropriately named log file
         arguments to the underlying command.
         """
-        logattrs = self.iter_logfile_items(screen_file=screen_file)
+        logattrs = self.iter_logfile_items(enable_screen_file=enable_screen_file)
         if debug:
             logattrs = itertools.chain(
                 logattrs,
@@ -235,7 +235,7 @@ class ScenarioType(object):
     """
 
     def __init__(self, agents, defaults, clientdefaults=None,
-                 serverdefaults=None, confpy=None, screen_file=True):
+                 serverdefaults=None, confpy=None, enable_screen_file=True):
         # agents iterable in launch-order
         self._agents = agents
         ua_attrs = UserAgent.keys()
@@ -254,7 +254,7 @@ class ScenarioType(object):
 
         # hook module
         self.mod = confpy
-        self.screen_file = screen_file
+        self.enable_screen_file = enable_screen_file
 
     @property
     def agents(self):
@@ -368,7 +368,7 @@ class ScenarioType(object):
         log.debug("merged contents:\n{}".format(params))
         ua = UserAgent(defaults=params)
 
-        ua.enable_logging(screen_file=self.screen_file)
+        ua.enable_logging(enable_screen_file=self.enable_screen_file)
 
         # call post defaults hook
         plugin.mng.hook.pysipp_post_ua_defaults(ua=ua)
