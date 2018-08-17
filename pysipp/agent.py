@@ -368,7 +368,8 @@ class ScenarioType(object):
         log.debug("merged contents:\n{}".format(params))
         ua = UserAgent(defaults=params)
 
-        ua.enable_logging(screen_file=self.screen_file)
+        if self.screen_file:
+            ua.enable_logging(screen_file=self.screen_file)
 
         # call post defaults hook
         plugin.mng.hook.pysipp_post_ua_defaults(ua=ua)
