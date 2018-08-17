@@ -118,11 +118,15 @@ class UserAgent(command.SippCmd):
             attr_name = 'trace_' + name
             setattr(self, attr_name, True)
 
-    def enable_logging(self, logdir=None, debug=False):
+    def enable_logging(self, logdir=None, debug=False, screen_file=True):
         """Enable agent logging by appending appropriately named log file
         arguments to the underlying command.
         """
-        logattrs = self.iter_logfile_items()
+        if screen_file:
+            logattrs = self.iter_logfile_items()
+        else:
+            logattrs = self.iter_logfile_items('log')
+
         if debug:
             logattrs = itertools.chain(
                 logattrs,
@@ -234,7 +238,7 @@ class ScenarioType(object):
     If called it will invoke the standard run hooks.
     """
     def __init__(self, agents, defaults, clientdefaults=None,
-                 serverdefaults=None, confpy=None, logs=True):
+                 serverdefaults=None, confpy=None, screen_file=True):
         # agents iterable in launch-order
         self._agents = agents
         ua_attrs = UserAgent.keys()
@@ -253,7 +257,7 @@ class ScenarioType(object):
 
         # hook module
         self.mod = confpy
-        self.logs = logs
+        self.screen_file = screen_file
 
     @property
     def agents(self):
@@ -366,8 +370,7 @@ class ScenarioType(object):
         log.debug("merged contents:\n{}".format(params))
         ua = UserAgent(defaults=params)
 
-        if self.logs:
-            ua.enable_logging()
+        ua.enable_logging(screen_file=self.screen_file)
 
         # call post defaults hook
         plugin.mng.hook.pysipp_post_ua_defaults(ua=ua)
