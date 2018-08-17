@@ -122,7 +122,7 @@ class UserAgent(command.SippCmd):
         """Enable agent logging by appending appropriately named log file
         arguments to the underlying command.
         """
-        logattrs = self.iter_logfile_items(screen_file)
+        logattrs = self.iter_logfile_items(screen_file=screen_file)
         if debug:
             logattrs = itertools.chain(
                 logattrs,
