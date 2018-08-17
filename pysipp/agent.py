@@ -79,7 +79,10 @@ class UserAgent(command.SippCmd):
     def iter_logfile_items(self, types_attr='_log_types', screen_file=True):
         for name in getattr(self, types_attr):
             if screen_file or name != 'screen':
-                attr_name = name + '_file'
+                if screen_file:
+                    attr_name = 'screen_file'
+                else:
+                    attr_name = name + '_file'
                 yield attr_name, getattr(self, attr_name)
 
     def iter_toconsole_items(self):
